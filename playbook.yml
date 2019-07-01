@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Add an apt key for Docker
+      apt_key:
+        keyserver: p80.pool.sks-keyservers.net
+        id: 58118E89F3A912897C070ADBF76221572C52609D
+
+    - name: Add docker repository
+      apt_repository:
+        repo: deb https://apt.dockerproject.org/repo ubuntu-trusty main
+        state: present
+        filename: docker.list
+
+    - name: update apt cache
+      apt: update_cache=yes
+
+    - name: Install Docker
+      apt:
+        name: docker-engine
+        state: present
+
